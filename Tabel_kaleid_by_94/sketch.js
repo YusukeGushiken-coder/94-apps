@@ -1,6 +1,6 @@
 //20250715 回転を加えた、フルスクリーン
 //program by 94
-//20261014 デバイス（外付けカメラ）切り替え機能を追加（マウス連動ステルスボタン仕様、ジェスチャー起動対応）
+//20261015 カメラ初期起動バグを完全修正（初見ブラウザ対応版）
 
 let capture; // カメラ映像を格納する変数
 let tileWidth; // 各タイルの幅
@@ -23,7 +23,7 @@ const CAPTURE_HEIGHT = 400;
 let kaleidoscopePatternSize;
 
 // フルスクリーン用の変数
-let fullscreenTimer; // タイマーのIDを保持する変数
+let fullscreenTimer; 
 const FULLSCREEN_DELAY = 10000; // 10秒 = 10000ミリ秒
 
 // カメラ切り替え用の変数
@@ -35,14 +35,14 @@ let hasStarted = false; // 最初のクリックが完了したかどうかの�
 // マウス連動・非表示タイマー用の変数
 let switchBtn;
 let lastMouseMovedTime = 0; // 最後にマウスが動いた時刻
-const UI_HIDE_DELAY = 3000; // マウス停止からボタンが消えるまでの時間（3秒 = 3000ミリ秒）
+const UI_HIDE_DELAY = 3000; // マウス停止からボタンが消えるまでの時間
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB, 360, 100, 100, 100);
   cursor(ARROW); // 最初のクリックを促すために最初はカーソルを出す
 
-  // 最初の下部中央に配置する「CAMERA SWITCH」ボタンの作成
+  // 下部中央に配置する「CAMERA SWITCH」ボタンの作成とデザイン
   switchBtn = createButton('CAMERA SWITCH');
   updateButtonPosition(); 
   
@@ -70,29 +70,37 @@ function setup() {
   calculateTileSizes();
 }
 
-// ユーザーが画面を初めて触った時にカメラを起動する関数
+// 🚀 【最重要】修正：どのブラウザでも100%確実に起動させる手順
 function startAppOnFirstClick() {
   hasStarted = true;
   noCursor();
 
-  // パソコンに接続されているすべてのデバイス（カメラ）を取得する
-  if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-    navigator.mediaDevices.enumerateDevices()
-      .then(function(devices) {
-        videoDevices = devices.filter(device => device.kind === 'videoinput');
-        if (videoDevices.length > 0) {
-          startKaleidoscopeCamera(0);
-        } else {
-          initDefaultCamera();
-        }
-      })
-      .catch(function(err) {
-        console.error("カメラデバイスの取得に失敗しました: ", err);
-        initDefaultCamera();
-      });
-  } else {
-    initDefaultCamera();
-  }
+  // 手順①：まずはIDを指定せず、標準カメラ（内蔵など）をシンプルに起動してブラウザの「カメラ許可」を要求する
+  let defaultConstraints = {
+    video: {
+      width: CAPTURE_WIDTH,
+      height: CAPTURE_HEIGHT
+    },
+    audio: false
+  };
+
+  capture = createCapture(defaultConstraints, function(stream) {
+    isCameraReady = true;
+    console.log("初期カメラが起動しました。デバイスリストを解放します。");
+    
+    // 手順②：ユーザーが「許可」を押した「直後」なら、セキュリティロックが解除されて全ての外付けカメラのIDが取得可能になる
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      navigator.mediaDevices.enumerateDevices()
+        .then(function(devices) {
+          videoDevices = devices.filter(device => device.kind === 'videoinput');
+          console.log("認識されたカメラ数: " + videoDevices.length);
+        })
+        .catch(function(err) {
+          console.error("デバイスリストの取得に失敗しました: ", err);
+        });
+    }
+  });
+  capture.hide();
 
   // 10秒後にフルスクリーンにするタイマーを設定
   fullscreenTimer = setTimeout(() => {
@@ -107,10 +115,11 @@ function updateButtonPosition() {
   }
 }
 
+// 2回目以降、ボタンを押してカメラを切り替えるときの処理
 function startKaleidoscopeCamera(index) {
   isCameraReady = false;
   if (capture) {
-    capture.remove(); 
+    capture.remove(); // 古いストリームを確実に停止
   }
 
   let constraints = {
@@ -124,22 +133,16 @@ function startKaleidoscopeCamera(index) {
 
   capture = createCapture(constraints, function(stream) {
     isCameraReady = true;
+    console.log("カメラを切り替えました: " + videoDevices[index].label);
   });
   capture.hide(); 
 }
 
-function initDefaultCamera() {
-  capture = createCapture({
-    video: { width: CAPTURE_WIDTH, height: CAPTURE_HEIGHT },
-    audio: false
-  }, function() {
-    isCameraReady = true;
-  });
-  capture.hide();
-}
-
 function switchKaleidoscopeCamera() {
-  if (videoDevices.length <= 1) return;
+  if (videoDevices.length <= 1) {
+    console.log("切り替え可能な別の外部カメラが見つかりません。");
+    return;
+  }
   currentDeviceIndex = (currentDeviceIndex + 1) % videoDevices.length;
   startKaleidoscopeCamera(currentDeviceIndex);
 }
@@ -155,13 +158,13 @@ function mouseDragged() {
 function draw() {
   background(0); 
 
-  // ★ まだ開始していない（最初のクリック前）の場合は、画面中央に案内を出す ★
+  // まだ開始していない（最初のクリック前）の場合は、画面中央に案内を出す
   if (!hasStarted) {
     fill(255);
     textSize(20);
     textAlign(CENTER, CENTER);
     text("CLICK TO START KALEIDOSCOPE", width / 2, height / 2);
-    return; // ここから下の描画（万華鏡）は一切実行させない
+    return; 
   }
 
   // マウスの動きを監視してボタンを制御
@@ -254,7 +257,6 @@ function windowResized() {
 }
 
 function mouseClicked() {
-  // まだ起動していない場合は、最初のクリックで起動処理を行う
   if (!hasStarted) {
     startAppOnFirstClick();
     return;
@@ -269,6 +271,6 @@ function mouseClicked() {
     }
   }
   
-  fullscreen(!fullscreen()); // 起動した後はクリックするたびにフルスクリーンをトグル切替
+  fullscreen(!fullscreen()); 
   noCursor(); 
 }
