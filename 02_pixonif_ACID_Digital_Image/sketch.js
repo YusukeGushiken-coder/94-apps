@@ -9,7 +9,7 @@ Tone.js 移植版
 */
 
 // ★ バージョン表記文字列（ここで内容を変更できます）
-const APP_VERSION_INFO = "pixonif ACID Digital Image v1.0.0 (2026.11.11) designed by Yusuke Gushiken";
+const APP_VERSION_INFO = "pixonif ACID Digital Image v1.0.1 (2026.11.11) designed by Yusuke Gushiken";
 
 // 固定値として設定するパラメータ
 const AREA_PERCENTAGE = 50; // エリア
@@ -247,7 +247,8 @@ function updateDistortionState() {
 
 function updateBeatVolume() {
   if (beatGainNode) {
-    const targetGain = params.beatSound ? (params.beatVol / 100) : 0;
+    // beatSound の ON/OFF でミュートせず、BEATS VOL の値だけを適用
+    const targetGain = params.beatVol / 100;
     beatGainNode.gain.rampTo(targetGain, 0.05);
   }
 }
