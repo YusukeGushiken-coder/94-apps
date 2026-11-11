@@ -1,7 +1,7 @@
 #94Apps
 
-p5.js で作成したWebアプリの集約リポジトリです。
-
+具志堅裕介がp5.js で作成したWebアプリケーションの集約リポジトリです。
+A collection of web applications created by Yusuke Gushiken using p5.js.
 
 
 ## アプリ一覧
