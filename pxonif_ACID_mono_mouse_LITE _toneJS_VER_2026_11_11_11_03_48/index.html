@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sonification System</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- 1. p5.js 本体 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+  
+    <!-- 2. Tone.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <!-- 3. Tweakpane (v4 ES Module 読み込み & グローバル登録) -->   
+    <script type="module">
+      import { Pane } from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.3/dist/tweakpane.min.js';
+      window.Pane = Pane;
+    </script>
+    <!-- v3 フォールバック -->
+    <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.min.js"></script>
+  </head>
+  <body>
+    <main>
+    </main>
+
+    <!-- 4. 各モジュールファイル -->
+    <script src="mouse_action.js"></script>
+    <script src="sonic.js"></script>
+    <script src="monitor.js"></script>
+    <script src="colorOPE.js"></script>
+
+    <!-- 5. メインエントリーポイント -->
+    <script src="sketch.js"></script>
+  </body>
+</html>
