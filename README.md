@@ -14,7 +14,7 @@ This is a web application that uses your webcam to create kaleidoscope patterns 
 
 
 - [02: ピクソニフアシッドデジタルイメージ](https://yusukegushiken-coder.github.io/94-apps/02_pixonif_ACID_Digital_Image/)
-- [READ ME](https://yusukegushiken-coder.github.io/94-apps/02_pixonif_ACID_Digital_Image/)  
+ - [about_02](https://yusukegushiken-coder.github.io/94-apps/02_pixonif_ACID_Digital_Image/)  
 
 画像ファイルを使ってアシッド・サウンドを鳴らすWEBアプリケーションです。  
 This is a web application that lets you play acid sounds using digital image files.
