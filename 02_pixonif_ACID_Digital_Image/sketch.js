@@ -6,10 +6,13 @@ Tone.js 移植版
 メジャー（1）: 大規模なアップデート、画面構成の刷新、互換性の変わる変更
 マイナー（0）: 機能の追加やUI改善（例：新機能追加で 1.1.0 へ）
 パッチ（0）: 細かなバグ修正や微調整（例：バグ修正で 1.0.1 へ）
+
+24K03551
+
 */
 
 // ★ バージョン表記文字列（ここで内容を変更できます）
-const APP_VERSION_INFO = "pixonif ACID Digital Image v1.0.1 (2026.11.11) designed by Yusuke Gushiken";
+const APP_VERSION_INFO = "PIXONIF ACID Digital Image v1.0.1 (2026.11.11) designed by Yusuke Gushiken";
 
 // 固定値として設定するパラメータ
 const AREA_PERCENTAGE = 50; // エリア
