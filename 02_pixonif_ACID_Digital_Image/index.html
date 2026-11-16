@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <title>Sonification System</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonification System - 解説</title>
+  <style>
+    body { font-family: sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; line-height: 1.7; color: #222; background: #fafafa; }
+    .card { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .btn-launch { display: inline-block; background: #111; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0; }
+    .btn-launch:hover { background: #333; }
+    h1 { margin-top: 0; font-size: 1.6em; }
+    h2 { font-size: 1.2em; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-top: 28px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>02: Sonification System</h1>
+    <p>色彩や画面上の動きをリアルタイムに音響化するインタラクティブ・システムです。</p>
 
-    <!-- 1. p5.js 本体 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
-  
-    <!-- 2. Tone.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <!-- ここからアプリ起動 -->
+    <a href="./app.html" class="btn-launch">▶ システムを起動する（音が出ます）</a>
 
-    <!-- 3. Tweakpane (v4 ES Module 読み込み & グローバル登録) -->   
-    <script type="module">
-      import { Pane } from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.3/dist/tweakpane.min.js';
-      window.Pane = Pane;
-    </script>
-    <!-- v3 フォールバック -->
-    <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.min.js"></script>
-  </head>
-  <body>
-    <main>
-    </main>
+    <h2>操作方法</h2>
+    <ul>
+      <li><strong>画面クリック / ドラッグ:</strong> サウンドのトリガー・変化</li>
+      <li><strong>右上パネル（Tweakpane）:</strong> 各種パラメータ・音源設定の調整</li>
+    </ul>
 
-    <!-- 4. 各モジュールファイル -->
-    <script src="mouse_action.js"></script>
-    <script src="sonic.js"></script>
-    <script src="monitor.js"></script>
-    <script src="colorOPE.js"></script>
+    <h2>システム構成</h2>
+    <p>p5.js による視覚処理と、Tone.js によるシンセシス・リズム生成を連動させています。</p>
 
-    <!-- 5. メインエントリーポイント -->
-    <script src="sketch.js"></script>
-  </body>
+    <p style="margin-top: 30px;"><a href="../">← 94 Apps シリーズ一覧へ戻る</a></p>
+  </div>
+</body>
 </html>
