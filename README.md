@@ -1,6 +1,6 @@
 ## About
 
-具志堅裕介がp5.js で作成したWebアプリケーションの集約リポジトリです。  
+具志堅裕介が作成したWebアプリケーションの集約リポジトリです。  
 A collection of web applications created by Yusuke Gushiken
 
 
